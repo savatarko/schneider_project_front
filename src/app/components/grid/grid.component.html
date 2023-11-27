@@ -1,0 +1,35 @@
+<p>grid works!</p>
+<button type="button" class="button" (click)="switchMove()" [disabled]=mode[0]>Move</button>
+<button type="button" class="button" (click)="switchConnect()" [disabled]=mode[1]>Connect</button>
+<button type="button" class="button" (click)="switchSource()" [disabled]=mode[2]>Source</button>
+<button type="button" class="button" (click)="switchSwitch()" [disabled]=mode[3]>Switch</button>
+<button type="button" class="button" (click)="switchNode()" [disabled]=mode[4]>Node</button>
+<button type="button" class="button" (click)="switchDelete()" [disabled]=mode[5]>Delete</button>
+<button type="button" class="button" (click)="switchState()" [disabled]=mode[6]>Change state</button>
+<button type="button" class="button" (click)="undo()">Undo</button>
+<button type="button" class="button" (click)="redo()">Redo</button>
+
+<br>
+<div class="container" (click)="onClick($event)">
+  <div *ngFor="let s of source">
+    <div *ngIf="s.state"  class="sourceon" [style.left.px]="s.x" [style.top.px]="s.y" [style.width.px] = "s.width" [style.height.px]="s.height"  (mousedown)="startDrag($event, s)" (click)="removeSource($event, s)"></div>
+    <div *ngIf="!s.state"  class="sourceoff" [style.left.px]="s.x" [style.top.px]="s.y" [style.width.px] = "s.width" [style.height.px]="s.height" (mousedown)="startDrag($event, s)" (click)="removeSource($event, s)"></div>
+  </div>
+  <div *ngFor="let switch of switches">
+    <div *ngIf="switch.state"  class="switchclosed" [style.left.px]="switch.x" [style.top.px]="switch.y" [style.width.px] = "switch.width" [style.height.px]="switch.height" (mousedown)="startDrag($event, switch)" (click)="removeSwitch($event, switch)"></div>
+    <div *ngIf="!switch.state"  class="switchopen" [style.left.px]="switch.x" [style.top.px]="switch.y" [style.width.px] = "switch.width" [style.height.px]="switch.height" (mousedown)="startDrag($event, switch)" (click)="removeSwitch($event, switch)"></div>
+  </div>
+  <div *ngFor="let node of nodes">
+    <div *ngIf="node.state === 0"  class="nodeoff" [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.width" [style.height.px]="node.height" (mousedown)="startDrag($event, node)" (click)="removeNode($event, node)"></div>
+    <div *ngIf="node.state === 1"  class="nodeon" [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.width" [style.height.px]="node.height" (mousedown)="startDrag($event, node)" (click)="removeNode($event, node)"></div>
+    <div *ngIf="node.state === 2"  class="nodeloop" [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.width" [style.height.px]="node.height" (mousedown)="startDrag($event, node)" (click)="removeNode($event, node)"></div>
+    <div *ngIf="node.state === 3"  class="nodedisconnected" [style.left.px]="node.x" [style.top.px]="node.y" [style.width.px]="node.width" [style.height.px]="node.height" (mousedown)="startDrag($event, node)" (click)="removeNode($event, node)"></div>
+  </div>
+  <div *ngFor="let line of lines">
+    <div *ngIf="line.x?.state===0" class="lineoff" [style.left.px]="(line.x?.x || 0) + (line.x?.width || 0)/2" [style.top.px]="(line.x?.y ||0) + (line.x?.height || 0)/2" [style.width.px]="getDistance(line.x!, line.y!)" [style.transform]="getLineRotation(line.x!, line.y!)" (click)="removeLine($event, line)"></div>
+    <div *ngIf="line.x?.state===1" class="lineon" [style.left.px]="(line.x?.x || 0) + (line.x?.width || 0)/2" [style.top.px]="(line.x?.y ||0) + (line.x?.height || 0)/2" [style.width.px]="getDistance(line.x!, line.y!)" [style.transform]="getLineRotation(line.x!, line.y!)" (click)="removeLine($event, line)"></div>
+    <div *ngIf="line.x?.state===2" class="lineloop" [style.left.px]="(line.x?.x || 0) + (line.x?.width || 0)/2" [style.top.px]="(line.x?.y ||0) + (line.x?.height || 0)/2" [style.width.px]="getDistance(line.x!, line.y!)" [style.transform]="getLineRotation(line.x!, line.y!)" (click)="removeLine($event, line)"></div>
+    <div *ngIf="line.x?.state===3" class="linedisconnected" [style.left.px]="(line.x?.x || 0) + (line.x?.width || 0)/2" [style.top.px]="(line.x?.y ||0) + (line.x?.height || 0)/2" [style.width.px]="getDistance(line.x!, line.y!)" [style.transform]="getLineRotation(line.x!, line.y!)" (click)="removeLine($event, line)"></div>
+  </div>
+
+</div>
